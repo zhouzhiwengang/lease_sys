@@ -145,4 +145,74 @@ CREATE TABLE `verification`  (
   PRIMARY KEY (`verification_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
+
+-- 导出  表 auth_shrio.cost 结构
+CREATE TABLE IF NOT EXISTS `cost` (
+  `cost_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `house_id` int(11) NOT NULL COMMENT '房屋ID',
+  `create_date` date NOT NULL COMMENT '创建日期',
+  `money` int(11) NOT NULL DEFAULT '0' COMMENT '金额',
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态:1 未支付，2:已支付',
+  PRIMARY KEY (`cost_id`),
+  KEY `FK_cost_house` (`house_id`),
+  CONSTRAINT `FK_cost_house` FOREIGN KEY (`house_id`) REFERENCES `house` (`house_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='费用信息表';
+
+-- 正在导出表  auth_shrio.cost 的数据：~0 rows (大约)
+/*!40000 ALTER TABLE `cost` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cost` ENABLE KEYS */;
+
+-- 导出  表 auth_shrio.house 结构
+CREATE TABLE IF NOT EXISTS `house` (
+  `house_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `house_number` varchar(32) NOT NULL COMMENT '房屋编号',
+  `area` varchar(50) DEFAULT NULL COMMENT '区域',
+  `house_address` varchar(50) DEFAULT NULL COMMENT '房屋地址',
+  `house_type` varchar(50) DEFAULT NULL COMMENT '房屋类型',
+  `acreage` varchar(50) DEFAULT NULL COMMENT '房屋面积',
+  `peroples` int(10) DEFAULT NULL COMMENT '可容纳人数',
+  `rent` int(10) DEFAULT NULL COMMENT '房屋租金',
+  `status` tinyint(4) DEFAULT NULL COMMENT '房屋状态:1:已租、2:待租',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  PRIMARY KEY (`house_id`),
+  KEY `FK_house_user` (`user_id`),
+  CONSTRAINT `FK_house_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='房屋信息表';
+
+-- 正在导出表  auth_shrio.house 的数据：~0 rows (大约)
+/*!40000 ALTER TABLE `house` DISABLE KEYS */;
+INSERT INTO `house` (`house_id`, `house_number`, `area`, `house_address`, `house_type`, `acreage`, `peroples`, `rent`, `status`, `user_id`) VALUES
+	(1, '0001', '广东省宝安区麻布新村', '105号13-1101', '1', '24.2平方', 3, 2400, 2, 1),
+	(2, '0002', '广东省宝安区麻布新村', '105号13-1102', '1', '44.2平方', 5, 3400, 1, 1);
+/*!40000 ALTER TABLE `house` ENABLE KEYS */;
+
+-- 导出  表 auth_shrio.house_lease 结构
+CREATE TABLE IF NOT EXISTS `house_lease` (
+  `house_id` int(11) NOT NULL COMMENT '房屋ID',
+  `lease_id` int(11) NOT NULL COMMENT '租赁者ID',
+  PRIMARY KEY (`house_id`,`lease_id`),
+  KEY `FK_house_lease_lease` (`lease_id`),
+  CONSTRAINT `FK_house_lease_house` FOREIGN KEY (`house_id`) REFERENCES `house` (`house_id`),
+  CONSTRAINT `FK_house_lease_lease` FOREIGN KEY (`lease_id`) REFERENCES `lease` (`lease_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='房屋租赁信息表';
+
+-- 正在导出表  auth_shrio.house_lease 的数据：~0 rows (大约)
+/*!40000 ALTER TABLE `house_lease` DISABLE KEYS */;
+/*!40000 ALTER TABLE `house_lease` ENABLE KEYS */;
+
+-- 导出  表 auth_shrio.lease 结构
+CREATE TABLE IF NOT EXISTS `lease` (
+  `lease_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `real_name` varchar(64) NOT NULL COMMENT '租赁者姓名',
+  `id_card` varchar(64) NOT NULL COMMENT '租赁者身份证号码',
+  `sex` tinyint(4) NOT NULL COMMENT '性别：1 男 2 女',
+  `telphone` varchar(32) NOT NULL COMMENT '电话',
+  `hometown` varchar(128) NOT NULL COMMENT '租赁者籍贯',
+  `status` tinyint(4) NOT NULL COMMENT '状态:1:租房中  2:未租房',
+  `start_date` date NOT NULL COMMENT '租赁开始时间',
+  `end_date` date NOT NULL COMMENT '租赁结束时间',
+  `sign_date` date NOT NULL COMMENT '租赁签订时间',
+  PRIMARY KEY (`lease_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='租赁者信息表';
+
 SET FOREIGN_KEY_CHECKS = 1;

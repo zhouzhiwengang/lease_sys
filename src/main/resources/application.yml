@@ -15,9 +15,9 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://192.168.1.73:3306/auth_shrio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://127.0.0.1:3306/auth_shrio?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
       username: root
-      password: digipower
+      password: 123456
       initial-size: 10
       max-active: 100
       min-idle: 10
@@ -48,6 +48,6 @@ spring:
     database: mysql
   redis:
     database: 0
-    host: 192.168.1.73
+    host: 127.0.0.1
     port: 6379
     password: abc123
