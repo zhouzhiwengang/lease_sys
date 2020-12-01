@@ -3,9 +3,7 @@ package com.zzg.config;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import javax.servlet.Filter;
-
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -15,7 +13,6 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import com.zzg.filter.JWTFilter;
 import com.zzg.shrio.MyRealm;
 
@@ -35,8 +32,12 @@ public class ShiroConfig {
 		factoryBean.setSecurityManager(securityManager);
 
 		Map<String, String> filterRuleMap = new HashMap<>();
+		filterRuleMap.put("/phone/login", "anon"); //邮箱登录接口排除
+		filterRuleMap.put("/email/login", "anon"); //邮箱登录接口排除
 		filterRuleMap.put("/sys/login", "anon"); //登录接口排除
 		filterRuleMap.put("/sys/logout", "anon"); //登出接口排除
+		filterRuleMap.put("/sys/kaptcha", "anon"); //验证码接口排除
+		filterRuleMap.put("/sys/verification", "anon"); //验证码接口排除
 		// 所有请求通过我们自己的JWT Filter
 		filterRuleMap.put("/**", "jwt");
 		factoryBean.setFilterChainDefinitionMap(filterRuleMap);

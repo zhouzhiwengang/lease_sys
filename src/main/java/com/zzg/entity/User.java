@@ -32,5 +32,15 @@ public class User {
             joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "userId")},
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "roleId")})
     private Set<Role> roles;
+    
+    private String telephone;
+    
+    private String email;
+    
+    private String guid;
+    
+    private String realName;
+    
+    private String address;
 
 }

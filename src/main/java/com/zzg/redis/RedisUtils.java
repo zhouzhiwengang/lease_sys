@@ -104,6 +104,15 @@ public class RedisUtils {
     }
  
     // 存储Hash操作
+    /**
+     * 删除Hash中指定数据
+     *
+     * @param key Redis键
+     * @param hKey Hash键
+     */
+    public static void hDelete(final String key, final String hKey) {
+        redisTemplate.opsForHash().delete(key, hKey);
+    }
  
     /**
      * 往Hash中存入数据

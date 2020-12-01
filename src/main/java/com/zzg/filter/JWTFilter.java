@@ -3,21 +3,27 @@ package com.zzg.filter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.alibaba.druid.util.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zzg.dao.TokenRelationRepository;
+import com.zzg.entity.TokenRelation;
 import com.zzg.redis.RedisUtils;
 import com.zzg.shrio.JWTToken;
+import com.zzg.spring.SpringContextUtil;
 import com.zzg.util.HttpContextUtil;
 
 public class JWTFilter extends BasicHttpAuthenticationFilter {
@@ -25,8 +31,9 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
 	
 	 // 定义jackson对象
     private static final ObjectMapper MAPPER = new ObjectMapper();
-
-    /**
+   
+    
+	/**
      * 如果带有 token，则对 token 进行检查，否则直接通过
      * >2 接着执行 isAccessAllowed
      */
@@ -62,7 +69,6 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
                 logger.error(e.getMessage());
             }
         }
-
         // 如果请求头不存在 Token，则可能是执行登陆操作或者是游客状态访问，
         // 无需检查 token，直接返回 true
         return true;
@@ -78,7 +84,15 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
         HttpServletRequest req = (HttpServletRequest) request;
         System.out.println("req.getHeader(Token)"+req.getHeader("Token"));
         String token = req.getHeader("Token");
-        return RedisUtils.get(token) != null;
+        if(StringUtils.isEmpty(token)){
+        	return false;
+        }
+        TokenRelationRepository tokenRelationRepository = SpringContextUtil.getBean(TokenRelationRepository.class);
+        TokenRelation relation = tokenRelationRepository.findByToken(token);
+        if(relation != null){
+        	return RedisUtils.get(relation.getUsername()) != null;
+        }
+        return false;
 
     }
 
