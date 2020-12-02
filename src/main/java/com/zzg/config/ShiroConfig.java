@@ -32,6 +32,7 @@ public class ShiroConfig {
 		factoryBean.setSecurityManager(securityManager);
 
 		Map<String, String> filterRuleMap = new HashMap<>();
+		filterRuleMap.put("/common/login", "anon"); //简单登录接口排除
 		filterRuleMap.put("/phone/login", "anon"); //邮箱登录接口排除
 		filterRuleMap.put("/email/login", "anon"); //邮箱登录接口排除
 		filterRuleMap.put("/sys/login", "anon"); //登录接口排除

@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,6 +33,45 @@ public class LoginController {
 	TokenRelationRepository tokenRelationRepository;
 	@Autowired
 	VerificationRepository verificationRepository;
+	
+	/**
+     * 登录
+     */
+	@CrossOrigin
+    @PostMapping("/common/login")
+    @ResponseBody
+    public Map<String, Object> commonLogin(@RequestBody Map<String, Object> parame) {
+        Map<String, Object> result = new HashMap<>();
+        String username = (String) parame.get("username");
+        String password = (String) parame.get("password");
+        //用户信息
+        User user = userRepository.findByUsername(username);
+        //账号不存在、密码错误
+        if (user == null || !user.getPassword().equals(password)) {
+            result.put("status", 400);
+            result.put("msg", "账号或密码有误");
+        } else {
+            //生成token，并保存到redis
+        	String token = JWTUtil.createToken(username);
+        	RedisUtils.set(username,token);
+        	RedisUtils.expire(username, EXPIRE_TIME);
+        	// user->token 关系保存到mysql 中
+        	TokenRelation relation = tokenRelationRepository.findByUsername(username);
+        	if(relation == null){
+        		relation = new TokenRelation();
+        		relation.setUsername(username);
+            	relation.setToken(token);
+        	} else {
+        		relation.setToken(token);
+        	}
+        	tokenRelationRepository.save(relation);
+        	result.put("token", token);
+            result.put("status", 200);
+            result.put("msg", "登陆成功");
+           
+        }
+        return result;
+    }
 	
 	
 	/**
