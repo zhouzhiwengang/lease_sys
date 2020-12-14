@@ -65,6 +65,8 @@ public class LoginController {
         		relation.setToken(token);
         	}
         	tokenRelationRepository.save(relation);
+        	result.put("uid", user.getUserId());
+        	result.put("username", username);
         	result.put("token", token);
             result.put("status", 200);
             result.put("msg", "登陆成功");

@@ -71,7 +71,7 @@ public class MyRealm extends AuthorizingRealm {
 	        	Role role = roleRepository.findByRoleId(item.getRoleId());
 	        	if(!CollectionUtils.isEmpty(role.getPermissions())){
 	        		for(Permission permission : role.getPermissions()){
-	        			 permissionSet.add(permission.getPermission());
+	        			 permissionSet.add(permission.getPermissionPath());
 	        		}
 	        	}
 	        });
