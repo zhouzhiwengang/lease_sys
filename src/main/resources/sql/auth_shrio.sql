@@ -109,23 +109,31 @@ INSERT INTO `lease` VALUES (1, '周志刚', '430921199112205454', 1, '1326574059
 -- ----------------------------
 -- Table structure for permission
 -- ----------------------------
+
 DROP TABLE IF EXISTS `permission`;
 CREATE TABLE `permission`  (
   `permission_id` int(11) NOT NULL,
-  `permission` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `permission_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `permision_component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `permision_icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `permision_parent_id` int(11) NULL DEFAULT NULL,
+  `permission_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `permission_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `permission_zh` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`permission_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+ 
 -- ----------------------------
 -- Records of permission
 -- ----------------------------
-INSERT INTO `permission` VALUES (1, 'select', '查看');
-INSERT INTO `permission` VALUES (2, 'update', '更新');
-INSERT INTO `permission` VALUES (3, 'delete', '删除');
-INSERT INTO `permission` VALUES (4, 'save', '新增');
-INSERT INTO `permission` VALUES (5, 'import', '导入');
-INSERT INTO `permission` VALUES (6, 'export-update', '导出-修改');
+INSERT INTO `permission`(permission_id,permission_zh,permission_name,permission_path,permision_icon,permision_component,permision_parent_id) VALUES (1, '首页', 'Admin', '/admin', 'el-icon-s-home', 'AdminIndex', 0);
+INSERT INTO `permission`(permission_id,permission_zh,permission_name,permission_path,permision_icon,permision_component,permision_parent_id) VALUES (2, '运行情况', 'DashBoard', '/admin/dashboard', NULL, 'dashboard/Index', 1);
+INSERT INTO `permission`(permission_id,permission_zh,permission_name,permission_path,permision_icon,permision_component,permision_parent_id) VALUES (3, '用户管理', 'User', '/admin', 'el-icon-user', 'AdminIndex', 0);
+INSERT INTO `permission`(permission_id,permission_zh,permission_name,permission_path,permision_icon,permision_component,permision_parent_id) VALUES (4, '用户信息', 'Profile', '/admin/user/Profile', NULL, 'user/Profile', 3);
+INSERT INTO `permission`(permission_id,permission_zh,permission_name,permission_path,permision_icon,permision_component,permision_parent_id) VALUES (5, '角色配置', 'Role', '/admin/user/Role', NULL, 'user/Role', 3);
+INSERT INTO `permission`(permission_id,permission_zh,permission_name,permission_path,permision_icon,permision_component,permision_parent_id) VALUES (6, '测试菜单', 'ArticleManage', '/admin', 'el-icon-edit', 'AdminIndex', 0);
+INSERT INTO `permission`(permission_id,permission_zh,permission_name,permission_path,permision_icon,permision_component,permision_parent_id) VALUES (7, '菜单列表1', 'ArticleList', '/admin/test/Test1', NULL, 'test/Test1', 6);
+INSERT INTO `permission`(permission_id,permission_zh,permission_name,permission_path,permision_icon,permision_component,permision_parent_id) VALUES (8, '菜单列表2', 'ArticleEdit', '/admin/test/Test2', NULL, 'test/Test2', 6);
+
 
 -- ----------------------------
 -- Table structure for role
@@ -162,19 +170,15 @@ CREATE TABLE `role_permission`  (
 -- Records of role_permission
 -- ----------------------------
 INSERT INTO `role_permission` VALUES (1, 1);
-INSERT INTO `role_permission` VALUES (2, 1);
-INSERT INTO `role_permission` VALUES (3, 1);
-INSERT INTO `role_permission` VALUES (4, 1);
 INSERT INTO `role_permission` VALUES (1, 2);
-INSERT INTO `role_permission` VALUES (2, 2);
-INSERT INTO `role_permission` VALUES (4, 2);
 INSERT INTO `role_permission` VALUES (1, 3);
-INSERT INTO `role_permission` VALUES (4, 3);
 INSERT INTO `role_permission` VALUES (1, 4);
-INSERT INTO `role_permission` VALUES (2, 4);
-INSERT INTO `role_permission` VALUES (4, 4);
-INSERT INTO `role_permission` VALUES (4, 5);
-INSERT INTO `role_permission` VALUES (4, 6);
+INSERT INTO `role_permission` VALUES (1, 5);
+INSERT INTO `role_permission` VALUES (1, 6);
+INSERT INTO `role_permission` VALUES (1, 7);
+INSERT INTO `role_permission` VALUES (1, 8);
+INSERT INTO `role_permission` VALUES (2, 1);
+INSERT INTO `role_permission` VALUES (2, 2);
 
 -- ----------------------------
 -- Table structure for token_relation
@@ -232,8 +236,8 @@ CREATE TABLE `user_role`  (
 -- ----------------------------
 -- Records of user_role
 -- ----------------------------
-INSERT INTO `user_role` VALUES (3, 3);
-INSERT INTO `user_role` VALUES (4, 4);
+INSERT INTO `user_role` VALUES (1, 1);
+INSERT INTO `user_role` VALUES (2, 2);
 
 -- ----------------------------
 -- Table structure for verification
